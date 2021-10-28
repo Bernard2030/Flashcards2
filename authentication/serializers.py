@@ -1,20 +1,22 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
+        
 
-class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(max_length=60, min_length=8, write_only=True)
-    email = serializers.EmailField(max_length=255, min_length=5)
-    first_name = serializers.CharField(max_length=255, min_length=3)
-    last_name = serializers.CharField(max_length=255, min_length=3)
+class RegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(
+        max_length=68, min_length=6, write_only=True)
+    default_error_messages = {
+        'username': 'The username should only contain alphanumeric characters'}
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email'
-        ]
+        fields = ['email', 'username', 'password']
     def validate(self, attrs):
-        if User.objects.filter(email=attrs['email']).exists():
-            raise serializers.ValidationError ({'email',('Email is already in use!!')})
-        return super().validate(attrs) 
+        email = attrs.get('email', '')
+        username = attrs.get('username', '')
+        if not username.isalnum():
+            raise serializers.ValidationError(
+                self.default_error_messages)
+        return attrs
     def create(self, validated_data):
-        return User.objects.create_user(validated_data)         
-
+        return User.objects.create_user(**validated_data)
