@@ -7,26 +7,24 @@ from rest_framework.response import Response
 from rest_framework import  serializers, status
 from .models import Flashcards
 from .serializers import FlashcardsSerializer
-from rest_framework import permissions
+
 
 # Create your views here.
 
 
 
 class Flash(APIView):
-    serializer_class = FlashcardsSerializer
-    permissions_classess = permissions.IsAuthenticated
     
     def get(self, request):
         proflash = Flashcards.objects.all()
-        serializer = FlashcardsSerializer(proflash, many=True)
-        return Response(serializer.data, status=200)
+        serializers = FlashcardsSerializer(proflash, many=True)
+        return Response(serializers.data, status=200)
 
     def post(self, request, format=None):
         
-        serializer = FlashcardsSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()  
+        serializers = FlashcardsSerializer(data=request.data)
+        if serializers.is_valid():
+            serializers.save()  
 
             return Response(serializers.data, status=status.HTTP_201_CREATED)
         return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)  
@@ -42,21 +40,21 @@ class Flashbyid(APIView):
 
     def get(self, request, id=None):
         instance = self.get_object(id)
-        serializer = FlashcardsSerializer(instance)
-        return Response(serializer.data)
+        serializers = FlashcardsSerializer(instance)
+        return Response(serializers.data)
 
     def put(self,request, id=None):
         data = request.data
         instance = self.get_object(id)
-        serializer = FlashcardsSerializer(instance,data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=200)
+        serializers = FlashcardsSerializer(instance,data=data)
+        if serializers.is_valid():
+            serializers.save()
+            return Response(serializers.data, status=200)
         return Response(serializers.errors, status=400)
 
     def delete(self, request, id=None):
         instance = self.get_object(id)
-        serializer = FlashcardsSerializer(instance)
+        serializers = FlashcardsSerializer(instance)
         instance.delete()
-        return Response(serializer.data) 
+        return Response(serializers.data)
 

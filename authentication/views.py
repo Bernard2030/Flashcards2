@@ -12,9 +12,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
 import jwt
 from django.conf import settings
-# from drf_yasg.utils import swagger_auto_schema
-# from drf_yasg import openapi
-# from .renderers import UserRenderer
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -48,9 +47,9 @@ class RegisterView(generics.GenericAPIView):
         return Response(user_data, status=status.HTTP_201_CREATED)
 class VerifyEmail(views.APIView):
     serializer_class = EmailVerificationSerializer
-    # token_param_config = openapi.Parameter(
-    #     'token', in_=openapi.IN_QUERY, description='Description', type=openapi.TYPE_STRING)
-    # @swagger_auto_schema(manual_parameters=[token_param_config])
+    token_param_config = openapi.Parameter(
+        'token', in_=openapi.IN_QUERY, description='Description', type=openapi.TYPE_STRING)
+    @swagger_auto_schema(manual_parameters=[token_param_config])
     def get(self, request):
         token = request.GET.get('token')
         try:
