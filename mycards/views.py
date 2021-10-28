@@ -6,18 +6,21 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import  serializers, status
 from .models import Flashcards
-from .serializers import FlashcardsSerializer,EmailverifySerializer
+from .serializers import FlashcardsSerializer
+from rest_framework import permissions
 
 # Create your views here.
 
 
 
 class Flash(APIView):
+    serializer_class = FlashcardsSerializer
+    permissions_classess = permissions.IsAuthenticated
     
     def get(self, request):
         proflash = Flashcards.objects.all()
         serializer = FlashcardsSerializer(proflash, many=True)
-        return Response(serializers.data, status=200)
+        return Response(serializer.data, status=200)
 
     def post(self, request, format=None):
         
