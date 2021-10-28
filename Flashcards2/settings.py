@@ -27,6 +27,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
+}
+
 AUTH_USER_MODEL = 'authentication.User'
 # Application definition
 
@@ -40,6 +50,7 @@ INSTALLED_APPS = [
     'mycards',
     'authentication',
     'rest_framework',
+    'drf_yasg',
     
 ]
 
